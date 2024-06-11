@@ -3,6 +3,8 @@ import Home from "./pages/Home";
 import Detail from "./pages/Detail";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import Layout from "./components/Layout";
 import { useState, useEffect } from "react";
 import { getUserInfo } from "./lib/api/auth";
 import "./App.css";
@@ -67,35 +69,23 @@ function App() {
         "자율주행차량 운전주행모드 자동 전환용 인식률 90% 이상의 다중 센서 기반 운전자 상태 인식 및 상황 인식 원천 기술 개발",
     },
   ]);
-
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    getUserInfo().then((res) => {
-      if (res) {
-        setUser({
-          userId: res.id,
-          nickname: res.nickname,
-          avatar: res.avatar,
-        });
-      }
-    });
-  }, []);
-
-  console.log("로그인된 유저 정보:", user);
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={<Home expenses={expenses} setExpenses={setExpenses} />}
-          />
-          <Route
-            path="/detail/:id"
-            element={<Detail expenses={expenses} setExpenses={setExpenses} />}
-          />
+          <Route path="/" element={<Layout user={user} setUser={setUser} />}>
+            <Route
+              index
+              element={<Home expenses={expenses} setExpenses={setExpenses} />}
+            />
+            <Route
+              path="/detail/:id"
+              element={<Detail expenses={expenses} setExpenses={setExpenses} />}
+            />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
           <Route path="/sign_in" element={<SignIn setUser={setUser} />} />
           <Route path="/sign_up" element={<SignUp />} />
         </Routes>
